@@ -1,35 +1,118 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { FontAwesome } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import React from "react";
+import { StyleSheet } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import "../../global.css";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+interface tabLayoutType {
+  name: string;
+  title: string;
+  shape: React.ComponentProps<typeof FontAwesome>["name"];
+}
+
+const tabLayout: tabLayoutType[] = [
+  {
+    name: "index",
+    title: "Home",
+    shape: "home",
+  },
+  {
+    name: "report",
+    title: "My Reports",
+    shape: "file-text",
+  },
+  {
+    name: "createReport",
+    title: "",
+    shape: "plus",
+  },
+  {
+    name: "map",
+    title: "Map",
+    shape: "map",
+  },
+  {
+    name: "profile",
+    title: "Profile",
+    shape: "user",
+  },
+];
+
+interface tabIconType {
+  shape: React.ComponentProps<typeof FontAwesome>["name"];
+  focused: boolean;
+}
+
+const TabIcon = ({ shape, focused = true }: tabIconType) => {
+  const scale = useSharedValue(focused ? 1.1 : 1);
+
+  React.useEffect(() => {
+    scale.value = withSpring(focused ? 1.2 : 1, {
+      damping: 15,
+      stiffness: 150,
+    });
+  }, [focused]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  return (
+    <Animated.View style={[styles.iconContainer, animatedStyle]}>
+      <FontAwesome
+        name={shape}
+        size={26}
+        color={focused ? "#2563eb" : "#6b7280"}
+      />
+    </Animated.View>
+  );
+};
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+        tabBarStyle: {
+          backgroundColor: "#ffffff",
+          borderTopWidth: 1,
+          borderTopColor: "#e5e7eb",
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarActiveTintColor: "#2563eb",
+        tabBarInactiveTintColor: "#6b7280",
+        tabBarShowLabel: true,
+      }}
+    >
+      {tabLayout.map((item) => (
+        <Tabs.Screen
+          key={item.name}
+          name={item.name}
+          options={{
+            title: item.title,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon shape={item.shape} focused={focused} />
+            ),
+          }}
+        />
+      ))}
+      <Tabs.Screen name="report/[id]" options={{ href: null }} />
     </Tabs>
   );
 }

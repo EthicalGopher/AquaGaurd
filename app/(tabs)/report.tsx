@@ -1,16 +1,19 @@
 import TopBar from "@/components/topbar";
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-const Home = () => {
+
+const MyReport = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView>
         <TopBar />
-        <Text>Home</Text>
+        <View>
+          <Text>MyReport</Text>
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 };
 
-export default Home;
+export default MyReport;
