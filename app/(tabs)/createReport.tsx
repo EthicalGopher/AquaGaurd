@@ -16,49 +16,13 @@ import {
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface MediaItem {
-  uri: string;
-  type: 'image' | 'video';
-}
-
-type ImpactLevel = 'Low' | 'Medium' | 'High' | 'Critical';
-
-interface FormData {
-  location: string;
-  latitude: number | null;
-  longitude: number | null;
-  category: string;
-  ph: string;
-  turbidity: string;
-  tds: string;
-  source: string;
-  waterColor: string;
-  odor: string;
-  description: string;
-  impact: ImpactLevel;
-  media: MediaItem[];
-}
-
-const initialFormData: FormData = {
-  location: "Koramangala, Bengaluru",
-  latitude: 12.9352, // Default Bengaluru coords
-  longitude: 77.6245,
-  category: "",
-  ph: "",
-  turbidity: "",
-  tds: "",
-  source: "Residential Tap",
-  waterColor: "Clear / Colorless",
-  odor: "",
-  description: "",
-  impact: "Low",
-  media: [],
-};
+import { CATEGORY_OPTIONS, IMPACT_OPTIONS, INITIAL_FORM_DATA } from "@/constants/mockData";
+import { FormData, ImpactLevel, MediaItem } from "@/constants/types";
 
 const CreateReport = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loadingLocation, setLoadingLocation] = useState(false);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
 
   useEffect(() => {
     if (currentStep === 1) {
@@ -139,7 +103,7 @@ const CreateReport = () => {
   };
 
   const resetForm = () => {
-    setFormData(initialFormData);
+    setFormData(INITIAL_FORM_DATA);
     setCurrentStep(1);
     // Refresh location on reset
     getCurrentLocation();
@@ -245,13 +209,7 @@ const CreateReport = () => {
     <View className="flex flex-col gap-6">
       <Text className="text-2xl font-bold text-[#006b1b]">What&apos;s the category?</Text>
       <View className="flex-row flex-wrap gap-3">
-        {[
-          { label: "Discoloration", icon: "palette", color: "#83e881" },
-          { label: "Bad Smell", icon: "air", color: "#60e9da" },
-          { label: "Low Pressure", icon: "speed", color: "#2dbcfe" },
-          { label: "Leakage", icon: "water-damage", color: "#fb5151" },
-          { label: "Other", icon: "more-horiz", color: "#abadaf" },
-        ].map((item) => (
+        {CATEGORY_OPTIONS.map((item) => (
           <TouchableOpacity
             key={item.label}
             onPress={() => updateFormData("category", item.label)}
@@ -374,12 +332,7 @@ const CreateReport = () => {
       <View className="flex flex-col gap-2">
         <Text className="text-[10px] font-bold text-on-surface-variant uppercase ml-1 tracking-widest">Urgency Level</Text>
         <View className="flex-row gap-2">
-          {[
-            { label: 'Low', color: '#83e881' },
-            { label: 'Medium', color: '#ffc107' },
-            { label: 'High', color: '#ff9800' },
-            { label: 'Critical', color: '#f44336' }
-          ].map((lvl) => (
+          {IMPACT_OPTIONS.map((lvl) => (
             <TouchableOpacity
               key={lvl.label}
               onPress={() => updateFormData("impact", lvl.label as ImpactLevel)}

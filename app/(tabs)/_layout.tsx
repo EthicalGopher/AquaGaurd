@@ -9,39 +9,8 @@ import Animated, {
 } from "react-native-reanimated";
 import "../../global.css";
 
-interface tabLayoutType {
-  name: string;
-  title: string;
-  shape: React.ComponentProps<typeof FontAwesome>["name"];
-}
-
-const tabLayout: tabLayoutType[] = [
-  {
-    name: "index",
-    title: "Home",
-    shape: "home",
-  },
-  {
-    name: "report",
-    title: "My Reports",
-    shape: "file-text",
-  },
-  {
-    name: "createReport",
-    title: "",
-    shape: "plus",
-  },
-  {
-    name: "map",
-    title: "Map",
-    shape: "map",
-  },
-  {
-    name: "profile",
-    title: "Profile",
-    shape: "user",
-  },
-];
+import { TAB_LAYOUT } from "@/constants/mockData";
+import { TabLayoutType } from "@/constants/types";
 
 interface tabIconType {
   shape: React.ComponentProps<typeof FontAwesome>["name"];
@@ -100,7 +69,7 @@ export default function TabLayout() {
         tabBarShowLabel: true,
       }}
     >
-      {tabLayout.map((item) => (
+      {TAB_LAYOUT.map((item) => (
         <Tabs.Screen
           key={item.name}
           name={item.name}
