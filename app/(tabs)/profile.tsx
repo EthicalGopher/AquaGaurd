@@ -3,8 +3,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { Image, ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../context/AuthContext";
 
 const Profile = () => {
+  const { signOut } = useAuth();
+
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-background">
@@ -110,6 +113,16 @@ const Profile = () => {
               </View>
             </View>
           </View>
+
+          {/* Sign Out Button */}
+          <TouchableOpacity 
+            className="bg-red-50 border border-red-200 rounded-lg p-4 mb-10 flex-row items-center justify-center gap-2"
+            onPress={signOut}
+          >
+            <MaterialIcons name="logout" size={20} color="#dc2626" />
+            <Text className="text-red-600 font-bold text-lg">Sign Out</Text>
+          </TouchableOpacity>
+
           <View className="h-20" />
         </ScrollView>
       </SafeAreaView>

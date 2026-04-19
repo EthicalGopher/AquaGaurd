@@ -7,7 +7,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import "../../global.css";
 
 import { TAB_LAYOUT } from "@/constants/mockData";
 import { TabLayoutType } from "@/constants/types";
